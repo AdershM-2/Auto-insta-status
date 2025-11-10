@@ -1,0 +1,27 @@
+# Core Video Processing
+moviepy==1.0.3
+ffmpeg-python==0.2.0
+
+# Computer Vision & AI
+opencv-python==4.9.0.80
+mediapipe==0.10.9
+ultralytics==8.1.0  # YOLO for object detection
+
+# Audio Processing
+librosa==0.10.1
+pydub==0.25.1
+
+# NLP & LLM
+openai==1.12.0  # For API option
+requests==2.31.0
+
+# Image Processing
+Pillow==10.2.0
+numpy==1.26.3
+
+# Utilities
+tqdm==4.66.1  # Progress bars
+python-dotenv==1.0.1
+
+# GUI (for later)
+tkinter-tooltip==3.1.0
