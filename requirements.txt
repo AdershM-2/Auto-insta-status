@@ -1,11 +1,14 @@
+# ============================================
+# CORE DEPENDENCIES (Required for all tiers)
+# ============================================
+
 # Core Video Processing
 moviepy==1.0.3
 ffmpeg-python==0.2.0
 
-# Computer Vision & AI
+# Computer Vision & AI - Basic
 opencv-python==4.9.0.80
 mediapipe==0.10.9
-ultralytics==8.1.0  # YOLO for object detection
 
 # Audio Processing
 librosa==0.10.1
@@ -20,8 +23,23 @@ Pillow==10.2.0
 numpy==1.26.3
 
 # Utilities
-tqdm==4.66.1  # Progress bars
+tqdm==4.66.1
 python-dotenv==1.0.1
 
-# GUI (for later)
-tkinter-tooltip==3.1.0
+# ============================================
+# OPTIONAL: Medium Tier AI Models
+# Install with: pip install -r requirements-medium.txt
+# ============================================
+# torch>=2.0.0
+# torchvision>=0.15.0
+# transformers>=4.30.0
+# open-clip-torch>=2.20.0
+# openai-whisper>=20231117
+
+# ============================================
+# OPTIONAL: Advanced Tier AI Models
+# Install with: pip install -r requirements-advanced.txt
+# ============================================
+# ultralytics>=8.1.0  # YOLO for object detection
+# fer>=22.5.0  # Emotion detection
+# sentence-transformers>=2.2.0  # Semantic embeddings

@@ -1,0 +1,19 @@
+# Medium Tier AI Models
+# These provide enhanced capabilities with moderate resource usage
+# Install: pip install -r requirements-medium.txt
+
+# PyTorch (required for CLIP and Whisper)
+torch>=2.0.0
+torchvision>=0.15.0
+
+# CLIP - Semantic scene understanding
+open-clip-torch>=2.20.0
+transformers>=4.30.0
+
+# Whisper - Speech transcription (base model ~500MB)
+openai-whisper>=20231117
+
+# Additional utilities for these models
+scipy>=1.10.0
+ftfy>=6.1.0
+regex>=2023.0.0

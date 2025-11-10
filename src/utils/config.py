@@ -34,6 +34,25 @@ class Config:
     OLLAMA_HOST = os.getenv("OLLAMA_HOST", "http://localhost:11434")
     OLLAMA_MODEL = os.getenv("OLLAMA_MODEL", "llama3.2")
 
+    # AI Model Tier (simple, medium, advanced)
+    AI_TIER = os.getenv("AI_TIER", "simple")
+
+    # Model availability flags (auto-detected)
+    HAS_CLIP = False
+    HAS_WHISPER = False
+    HAS_YOLO = False
+    HAS_EMOTION_DETECTION = False
+
+    # CLIP settings (Medium tier)
+    CLIP_MODEL = "ViT-B-32"
+    CLIP_PRETRAINED = "openai"
+
+    # Whisper settings (Medium tier)
+    WHISPER_MODEL = "base"  # tiny, base, small, medium, large
+
+    # Emotion detection settings (Advanced tier)
+    EMOTION_DETECTION_MTCNN = True
+
     # Analysis settings
     FACE_DETECTION_CONFIDENCE = 0.5
     SCENE_CHANGE_THRESHOLD = 30.0
@@ -69,5 +88,54 @@ class Config:
         return cls.TEMP_DIR / f"{prefix}_{uuid.uuid4().hex[:8]}{suffix}"
 
 
+    @classmethod
+    def detect_available_models(cls):
+        """Auto-detect which AI models are available"""
+        # Check for CLIP
+        try:
+            import open_clip
+            cls.HAS_CLIP = True
+        except ImportError:
+            cls.HAS_CLIP = False
+
+        # Check for Whisper
+        try:
+            import whisper
+            cls.HAS_WHISPER = True
+        except ImportError:
+            cls.HAS_WHISPER = False
+
+        # Check for YOLO
+        try:
+            import ultralytics
+            cls.HAS_YOLO = True
+        except ImportError:
+            cls.HAS_YOLO = False
+
+        # Check for emotion detection
+        try:
+            import fer
+            cls.HAS_EMOTION_DETECTION = True
+        except ImportError:
+            cls.HAS_EMOTION_DETECTION = False
+
+    @classmethod
+    def get_tier_info(cls) -> dict:
+        """Get information about current AI tier"""
+        cls.detect_available_models()
+
+        return {
+            'tier': cls.AI_TIER,
+            'models': {
+                'basic': ['MediaPipe', 'OpenCV', 'Librosa'],
+                'clip': cls.HAS_CLIP,
+                'whisper': cls.HAS_WHISPER,
+                'yolo': cls.HAS_YOLO,
+                'emotion': cls.HAS_EMOTION_DETECTION
+            }
+        }
+
+
 # Initialize directories on import
 Config.ensure_dirs()
+Config.detect_available_models()

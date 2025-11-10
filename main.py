@@ -169,6 +169,41 @@ class ReelEditor:
         return output_path
 
 
+def show_model_info():
+    """Display information about available AI models"""
+    print("\n" + "=" * 60)
+    print("AI Model Tier System")
+    print("=" * 60)
+
+    tier_info = Config.get_tier_info()
+
+    print(f"\nCurrent Tier: {tier_info['tier'].upper()}")
+    print("\n📦 Installed Models:")
+    print(f"  ✓ Basic Models (Always available):")
+    for model in tier_info['models']['basic']:
+        print(f"    - {model}")
+
+    print(f"\n  Medium Tier Models:")
+    print(f"    {'✓' if tier_info['models']['clip'] else '✗'} CLIP (Semantic scene understanding)")
+    print(f"    {'✓' if tier_info['models']['whisper'] else '✗'} Whisper (Speech transcription)")
+
+    print(f"\n  Advanced Tier Models:")
+    print(f"    {'✓' if tier_info['models']['yolo'] else '✗'} YOLO (Object detection)")
+    print(f"    {'✓' if tier_info['models']['emotion'] else '✗'} Emotion Detection")
+
+    print("\n📥 Installation:")
+    print("  Simple (default):  pip install -r requirements.txt")
+    print("  Medium tier:       pip install -r requirements-medium.txt")
+    print("  Advanced tier:     pip install -r requirements-advanced.txt")
+
+    print("\n💡 Model Sizes:")
+    print("  Simple:   ~500MB   (Basic AI, fast)")
+    print("  Medium:   ~2.5GB   (CLIP + Whisper, better understanding)")
+    print("  Advanced: ~4GB     (All features, best results)")
+
+    print("\n" + "=" * 60 + "\n")
+
+
 def main():
     """CLI entry point"""
 
@@ -195,6 +230,9 @@ Examples:
     --output "output/product_reel.mp4" \\
     --style "professional" \\
     --duration 15
+
+  # Check installed AI models
+  python main.py --show-models
         """
     )
 
@@ -257,7 +295,26 @@ Examples:
         help='Use OpenAI API instead of local Ollama for captions'
     )
 
+    parser.add_argument(
+        '--show-models',
+        action='store_true',
+        help='Show information about installed AI models and exit'
+    )
+
+    parser.add_argument(
+        '--ai-tier',
+        type=str,
+        choices=['simple', 'medium', 'advanced'],
+        default='simple',
+        help='AI model tier to use (default: simple)'
+    )
+
     args = parser.parse_args()
+
+    # Show model info if requested
+    if args.show_models:
+        show_model_info()
+        sys.exit(0)
 
     # Parse file lists
     images = parse_file_list(args.images) if args.images else []

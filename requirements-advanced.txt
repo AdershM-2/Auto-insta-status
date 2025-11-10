@@ -1,0 +1,19 @@
+# Advanced Tier AI Models
+# These provide maximum capabilities but require more resources
+# Install: pip install -r requirements-advanced.txt
+
+# First install medium tier
+-r requirements-medium.txt
+
+# YOLO - Advanced object detection and tracking
+ultralytics>=8.1.0
+
+# Emotion Detection
+fer>=22.5.0
+
+# Semantic Embeddings
+sentence-transformers>=2.2.0
+
+# Additional advanced features
+timm>=0.9.0  # Vision models
+facenet-pytorch>=2.5.0  # Advanced face features
