@@ -13,18 +13,29 @@ A free, AI-powered tool that intelligently edits your images and videos into pro
 
 ## Installation
 
-### Windows Users (Easiest Method)
+### Windows Users (Recommended)
 
-**Option 1: Using Batch Script**
+**🚀 One-Click Install**
+
+Just run the installer in the project folder:
+
 ```cmd
-setup.bat
+install.bat
 ```
 
-**Option 2: Using PowerShell** (Run PowerShell as Administrator first)
+Or using PowerShell:
 ```powershell
-Set-ExecutionPolicy RemoteSigned -Scope CurrentUser
-.\setup.ps1
+.\install.ps1
 ```
+
+The installer will:
+- ✅ Check your Python
+- ✅ Create virtual environment
+- ✅ Let you choose AI tier (Simple/Medium/Advanced)
+- ✅ Install everything automatically
+- ✅ Test the installation
+
+**That's it!** See [QUICKSTART.md](QUICKSTART.md) for a complete beginner's guide.
 
 ### Linux/macOS Users
 
