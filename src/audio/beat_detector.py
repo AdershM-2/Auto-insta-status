@@ -3,7 +3,7 @@ Music beat detection using Librosa
 """
 import numpy as np
 from pathlib import Path
-from typing import List, Tuple
+from typing import List, Tuple, Dict
 import librosa
 
 from src.utils.config import Config
