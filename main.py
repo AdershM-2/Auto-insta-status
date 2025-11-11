@@ -11,6 +11,7 @@ import time
 
 from src.utils.config import Config
 from src.utils.helpers import get_logger, parse_file_list, validate_media_files
+from src.utils.interactive import interactive_mode, get_media_from_folder
 from src.editor.video_processor import VideoProcessor
 from src.editor.clip_selector import ClipSelector
 from src.analyzer import MomentScorer
@@ -249,10 +250,21 @@ Examples:
     )
 
     parser.add_argument(
+        '--folder',
+        type=str,
+        help='📁 Folder containing media files (automatically finds images and videos) - EASIEST METHOD!'
+    )
+
+    parser.add_argument(
         '--description',
         type=str,
-        required=True,
         help='Description of the reel content (used for AI caption generation)'
+    )
+
+    parser.add_argument(
+        '--interactive',
+        action='store_true',
+        help='🎯 Interactive mode with guided prompts - RECOMMENDED FOR BEGINNERS'
     )
 
     parser.add_argument(
@@ -316,26 +328,53 @@ Examples:
         show_model_info()
         sys.exit(0)
 
-    # Parse file lists
-    images = parse_file_list(args.images) if args.images else []
-    videos = parse_file_list(args.videos) if args.videos else []
+    # Interactive mode
+    if args.interactive:
+        params = interactive_mode()
+        images = params['images']
+        videos = params['videos']
+        description = params['description']
+        music_path = params['music']
+        output_path = params['output']
+        duration = params['duration']
+        style = params['style']
+    else:
+        # Folder mode
+        if args.folder:
+            logger.info(f"📁 Loading media from folder: {args.folder}")
+            images, videos = get_media_from_folder(args.folder)
 
-    if not images and not videos:
-        logger.error("❌ No media files provided! Use --images and/or --videos")
-        parser.print_help()
-        sys.exit(1)
+            if not images and not videos:
+                logger.error("❌ No media files found in folder!")
+                sys.exit(1)
 
-    logger.info(f"Found {len(images)} images and {len(videos)} videos")
+            logger.info(f"Found {len(images)} images and {len(videos)} videos")
+        else:
+            # Parse file lists from arguments
+            images = parse_file_list(args.images) if args.images else []
+            videos = parse_file_list(args.videos) if args.videos else []
 
-    # Parse music path
-    music_path = Path(args.music) if args.music else None
+        if not images and not videos:
+            logger.error("❌ No media files provided!")
+            logger.error("💡 Try: --folder 'path' or --interactive")
+            parser.print_help()
+            sys.exit(1)
+
+        # Description is required for non-interactive mode
+        if not args.description:
+            logger.error("❌ --description is required (or use --interactive mode)")
+            parser.print_help()
+            sys.exit(1)
+
+        description = args.description
+        music_path = Path(args.music) if args.music else None
+        output_path = Path(args.output)
+        duration = args.duration
+        style = args.style
 
     if music_path and not music_path.exists():
         logger.warning(f"⚠️  Music file not found: {music_path}")
         music_path = None
-
-    # Parse output path
-    output_path = Path(args.output)
 
     # Test LLM connection
     if not args.no_captions:
@@ -353,11 +392,11 @@ Examples:
         result = editor.create_reel(
             images=images,
             videos=videos,
-            description=args.description,
+            description=description,
             output_path=output_path,
             music_path=music_path,
-            duration=args.duration,
-            style=args.style
+            duration=duration,
+            style=style
         )
 
         logger.info(f"\n🎉 Success! Your reel is ready: {result}")
